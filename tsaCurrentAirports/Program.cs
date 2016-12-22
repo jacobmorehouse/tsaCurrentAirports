@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace tsaCurrentAirports
 {
-
+    /*
     public class Airport
     {
         string name;
@@ -32,14 +32,14 @@ namespace tsaCurrentAirports
         }
 
     }
-
+    */
     class Program
     {
         static void Main(string[] args)
         {
             var theUri = "https://www.tsa.gov/data/apcp.xml";
             XmlDocument xmlResult = new XmlDocument();
-            List<Airport> airportList = new List<Airport>();
+            //List<Airport> airportList = new List<Airport>();
             
             try
             {
@@ -81,7 +81,7 @@ namespace tsaCurrentAirports
 
                 //Console.WriteLine("Name: {0} , short {1} , city {2}", name, shortcode, city);
                 
-                //Your sql insert command will go here;
+                //sql insert command will go here;
 
 
             }
