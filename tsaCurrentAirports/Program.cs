@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -52,8 +48,6 @@ namespace tsaCurrentAirports
             cmd.CommandType = CommandType.Text;
             cmd.Connection = sqlConnection1;
 
-            Console.WriteLine(cmd.CommandText);
-
             sqlConnection1.Open();
             cmd.ExecuteNonQuery();
             bool foundAirport = cmd.ExecuteReader().HasRows;
@@ -65,11 +59,9 @@ namespace tsaCurrentAirports
         {
             SqlConnection sqlConnection2 = new SqlConnection(connectionString);
             SqlCommand cmd2 = new SqlCommand();
-            cmd2.CommandText = String.Format("INSERT INTO airports (name, shortcode, city, state, latitude, longitude, utc, dst, precheck) values ('{0}','{1}','{2}','{3}',{4},{5},{6},{7},{8})", iAirport.name, iAirport.shortcode, iAirport.city, iAirport.state, iAirport.latitude, iAirport.longitude, iAirport.utc, iAirport.dst, iAirport.precheck);
+            cmd2.CommandText = String.Format("INSERT INTO airports (name, shortcode, city, state, latitude, longitude, utc, dst, precheck, longname, shortname) values ('{0}','{1}','{2}','{3}',{4},{5},{6},{7},{8})", iAirport.name, iAirport.shortcode, iAirport.city, iAirport.state, iAirport.latitude, iAirport.longitude, iAirport.utc, iAirport.dst, iAirport.precheck);
             cmd2.CommandType = CommandType.Text;
             cmd2.Connection = sqlConnection2;
-
-            Console.WriteLine(cmd2.CommandText);
 
             sqlConnection2.Open();
             cmd2.ExecuteNonQuery();
@@ -83,8 +75,6 @@ namespace tsaCurrentAirports
             cmd3.CommandText = String.Format("UPDATE airports SET name = '{0}', shortcode = '{1}', city = '{2}', state = '{3}', latitude = {4}, longitude = {5}, utc = {6}, dst = {7}, precheck = {8} where shortcode = '{1}'", iAirport.name, iAirport.shortcode, iAirport.city, iAirport.state, iAirport.latitude, iAirport.longitude, iAirport.utc, iAirport.dst, iAirport.precheck);
             cmd3.CommandType = CommandType.Text;
             cmd3.Connection = sqlConnection3;
-
-            Console.WriteLine(cmd3.CommandText);
 
             sqlConnection3.Open();
             cmd3.ExecuteNonQuery();
@@ -114,7 +104,6 @@ namespace tsaCurrentAirports
                 {
                     var result = streamReader.ReadToEnd();
                     xmlResult.LoadXml(result);
-                    //xmlResult.Save("c:\\users\\jmwin7\\Desktop\\tsaprojectresult.txt"); //working!
                 }
             }
             catch (Exception e)
@@ -122,8 +111,6 @@ namespace tsaCurrentAirports
                 Console.WriteLine("catch1 triggered: {0}", e.Message);
             }
             
-
-            //At this point I have XML!
 
             //loop over that XML object
             XmlNodeList xmlNodes = xmlResult.SelectNodes("/airports/airport");
@@ -145,9 +132,7 @@ namespace tsaCurrentAirports
 
             foreach (var ap in listAirports)
             {
-                Console.WriteLine("AP value: {0}", ap.shortcode);
-                Console.WriteLine(databaseOps.dataAirportExists(ap.shortcode));
-
+                Console.WriteLine("Current airport: {0}", ap.shortcode);
                 
                 if (databaseOps.dataAirportExists(ap.shortcode) == false)
                 {
@@ -158,13 +143,7 @@ namespace tsaCurrentAirports
                     databaseOps.updateAirport(ap);
                 }
                 Console.WriteLine("");
-                Console.WriteLine("");
-
-                
             }
-
-
-
         }
     }
 }
